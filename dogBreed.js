@@ -2,29 +2,29 @@
 'use strict';
 /*global $*/
 
-function getDogImage(num) {
-  fetch(`https://dog.ceo/api/breeds/image/random/${num}`)
+function getDogImage(name) {
+  fetch(`https://dog.ceo/api/breed/hound-${name}/images/random`)
     .then(response => response.json())
     .then(responseJson => displayResults(responseJson))
     .catch(() => alert('Something went wrong. Try again later.'));
+
 }
 
 function displayResults(responseJson) {
   //replace the existing image with the new one
-  const imgString = responseJson.message.map(link => `<img src="${link}" class="results-img">`).join('');
+  const imgString = `<img src="${responseJson.message}" class="results-img">`;
   console.log(imgString);
-  $('.js-results-img').replaceWith(imgString);
-
+  $('.js-breed-results-img').replaceWith(imgString);
   //display the results section
-  $('.results').removeClass('hidden');
-  $('.breed-results').addClass('hidden');
+  $('.breed-results').removeClass('hidden');
+  $('.results').addClass('hidden');
 }
 
 function watchForm() {
-  $('.numForm').submit(event => {
+  $('.breedForm').submit(event => {
     event.preventDefault();
-    const imgNum = $('.js-image-number').val();
-    getDogImage(imgNum);
+    const breedType = $('.js-breed-image').val();
+    getDogImage(breedType);
   });
 }
 
