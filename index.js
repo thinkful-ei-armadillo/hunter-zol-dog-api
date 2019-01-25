@@ -2,11 +2,26 @@
 'use strict';
 /*global $*/
 
-function getDogImage(num) {
-  fetch(`https://dog.ceo/api/breeds/image/random/${num}`)
-    .then(response => response.json())
-    .then(responseJson => displayResults(responseJson))
-    .catch(() => alert('Something went wrong. Try again later.'));
+function getDogImage(value) {
+  console.log(typeof value);
+  if (typeof value === 'string'){
+    fetch(`https://dog.ceo/api/breed/hound-${name}/images/random/1`)
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.status === 'success') {
+          displayBreedResults(responseJson);
+        }
+        else {
+          $('.js-results-img').replaceWith('<p>Not a breed in the inventory</p>');
+        }
+      })
+      .catch(() => alert('Something went wrong. Try again later.'));
+  } else {
+    fetch(`https://dog.ceo/api/breeds/image/random/${value.toString()}`)
+      .then(response => response.json())
+      .then(responseJson => displayResults(responseJson))
+      .catch(() => alert('Something went wrong. Try again later.'));
+  }
 }
 
 function displayResults(responseJson) {
@@ -14,56 +29,43 @@ function displayResults(responseJson) {
   const imgString = responseJson.message.map(link => `<img src="${link}" class="js-results-img">`).join('');
   console.log(imgString);
   $('.js-results-img').replaceWith(imgString);
-
-  //display the results section
-  $('.results').removeClass('hidden');
 }
 
 function watchForm() {
   $('.numForm').submit(event => {
     event.preventDefault();
-    const imgNum = $('.js-image-number').val();
+    const imgNum = parseInt($('.js-image-number').val());
+    $('.js-image-number').val('');
+    resetResult();
     getDogImage(imgNum);
   });
 }
 
-function getDogBreedImage(name) {
-  fetch(`https://dog.ceo/api/breed/hound-${name}/images/random`)
-    .then(response => response.json())
-    .then(responseJson => {
-      if (responseJson.status === 'success') {
-        displayBreedResults(responseJson);
-      }
-      else {
-        $('.js-results-img').replaceWith('<p>Not a breed in the inventory</p>');
-      }
-    })
-    .catch(() => alert('Something went wrong. Try again later.'));
-}
 
 function displayBreedResults(responseJson) {
   //replace the existing image with the new one
   const imgString = `<img src="${responseJson.message}" class="js-results-img">`;
   console.log(imgString);
   $('.js-results-img').replaceWith(imgString);
-  //display the results section
-  $('.results').removeClass('hidden');
 }
 
 function watchBreedForm() {
   $('.breedForm').submit(event => {
     event.preventDefault();
     const breedType = $('.js-breed-image').val();
-    getDogBreedImage(breedType);
+    $('.js-breed-image').val();
+    resetResult();
+    getDogImage(breedType);
   });
 }
 
-$(function() {
-  console.log('App loaded! Waiting for submit!');
-  watchBreedForm();
-});
+function resetResult(){
+  $('.js-results-img').replaceWith('<img class="js-results-img" alt="placeholder">');
+}
+
 
 $(function() {
   console.log('App loaded! Waiting for submit!');
   watchForm();
+  watchBreedForm();
 });
