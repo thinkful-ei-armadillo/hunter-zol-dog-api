@@ -7,17 +7,15 @@ function getDogImage(name) {
     .then(response => response.json())
     .then(responseJson => displayResults(responseJson))
     .catch(() => alert('Something went wrong. Try again later.'));
-
 }
 
 function displayResults(responseJson) {
   //replace the existing image with the new one
-  const imgString = `<img src="${responseJson.message}" class="results-img">`;
+  const imgString = `<img src="${responseJson.message}" class="js-results-img">`;
   console.log(imgString);
   $('.js-breed-results-img').replaceWith(imgString);
   //display the results section
   $('.breed-results').removeClass('hidden');
-  $('.results').addClass('hidden');
 }
 
 function watchForm() {
