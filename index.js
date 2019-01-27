@@ -5,7 +5,7 @@
 function getDogImage(value) {
   console.log(typeof value);
   if (typeof value === 'string'){
-    fetch(`https://dog.ceo/api/breed/hound-${name}/images/random/1`)
+    fetch(`https://dog.ceo/api/breed/${name}/images/random`)
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.status === 'success') {
@@ -26,9 +26,10 @@ function getDogImage(value) {
 
 function displayResults(responseJson) {
   //replace the existing image with the new one
+  console.log(responseJson.message);
   const imgString = responseJson.message.map(link => `<img src="${link}" class="js-results-img">`).join('');
   console.log(imgString);
-  $('.js-results-img').replaceWith(imgString);
+  $('.js-results').html(imgString);
 }
 
 function watchForm() {
@@ -36,7 +37,6 @@ function watchForm() {
     event.preventDefault();
     const imgNum = parseInt($('.js-image-number').val());
     $('.js-image-number').val('');
-    resetResult();
     getDogImage(imgNum);
   });
 }
@@ -46,7 +46,7 @@ function displayBreedResults(responseJson) {
   //replace the existing image with the new one
   const imgString = `<img src="${responseJson.message}" class="js-results-img">`;
   console.log(imgString);
-  $('.js-results-img').replaceWith(imgString);
+  $('.js-results').html(imgString);
 }
 
 function watchBreedForm() {
@@ -54,14 +54,10 @@ function watchBreedForm() {
     event.preventDefault();
     const breedType = $('.js-breed-image').val();
     $('.js-breed-image').val();
-    resetResult();
     getDogImage(breedType);
   });
 }
 
-function resetResult(){
-  $('.js-results-img').replaceWith('<img class="js-results-img" alt="placeholder">');
-}
 
 
 $(function() {
