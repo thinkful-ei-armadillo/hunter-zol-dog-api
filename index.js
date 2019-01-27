@@ -27,7 +27,7 @@ function displayResults(responseJson) {
   console.log(responseJson.message);
   const imgString = responseJson.message.map(link => `<img src="${link}" class="js-results-img">`).join('');
   console.log(imgString);
-  $('.js-results').append(imgString);
+  $('.js-results').html(imgString);
 }
 
 function watchForm() {
@@ -51,7 +51,7 @@ function watchBreedForm() {
   $('.breedForm').submit(event => {
     event.preventDefault();
     const breedType = $('.js-breed-image').val();
-    $('.js-breed-image').val();
+    $('.js-breed-image').val('');
     getDogImage(breedType);
   });
 }
