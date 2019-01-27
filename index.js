@@ -1,18 +1,16 @@
-/* eslint-disable no-console */
 'use strict';
 /*global $*/
 
 function getDogImage(value) {
-  console.log(typeof value);
   if (typeof value === 'string'){
-    fetch(`https://dog.ceo/api/breed/${name}/images/random`)
+    fetch(`https://dog.ceo/api/breed/${value}/images/random`)
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.status === 'success') {
           displayBreedResults(responseJson);
         }
         else {
-          $('.js-results-img').replaceWith('<p>Not a breed in the inventory</p>');
+          $('.js-results').append('<p>Not a breed in the inventory</p>');
         }
       })
       .catch(() => alert('Something went wrong. Try again later.'));
@@ -24,12 +22,12 @@ function getDogImage(value) {
   }
 }
 
+// ========display from 1 to 50 random images =========
 function displayResults(responseJson) {
-  //replace the existing image with the new one
   console.log(responseJson.message);
   const imgString = responseJson.message.map(link => `<img src="${link}" class="js-results-img">`).join('');
   console.log(imgString);
-  $('.js-results').html(imgString);
+  $('.js-results').append(imgString);
 }
 
 function watchForm() {
@@ -42,8 +40,8 @@ function watchForm() {
 }
 
 
+// ========random image from breed list ========
 function displayBreedResults(responseJson) {
-  //replace the existing image with the new one
   const imgString = `<img src="${responseJson.message}" class="js-results-img">`;
   console.log(imgString);
   $('.js-results').html(imgString);
